@@ -36,6 +36,12 @@ func (h *Holder) AddPair(first, second string) {
 		Second: second,
 	})
 }
+func (h *Holder) AddUSDTPair(first string) {
+	h.Pairs = append(h.Pairs, balance_models.Pair{
+		First:  first,
+		Second: "USDT",
+	})
+}
 func (h *Holder) Update() {
 	lg := logger.Get()
 	wg := sync.WaitGroup{}

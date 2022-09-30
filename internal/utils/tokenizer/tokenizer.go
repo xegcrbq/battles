@@ -1,6 +1,7 @@
 package tokenizer
 
 import (
+	"battles/internal/utils/env"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"os"
@@ -27,6 +28,7 @@ func (c DataClaims) Valid() error {
 	}
 }
 func Get() *Tokenizer {
+	env.InitEnv()
 	once.Do(func() {
 		tknz = &Tokenizer{
 			jwtKey: []byte(os.Getenv("jwtKey")),

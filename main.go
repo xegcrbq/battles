@@ -3,7 +3,6 @@ package main
 import (
 	"battles/internal/api"
 	"battles/internal/db"
-	"battles/internal/utils/env"
 	"battles/internal/utils/logger"
 	"context"
 	"fmt"
@@ -19,8 +18,6 @@ const (
 )
 
 func main() {
-	//-Load env-//
-	env.InitEnv()
 	// -------------------- Set up logging -------------------- //
 
 	log := logger.Get()

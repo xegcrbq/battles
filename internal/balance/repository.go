@@ -7,5 +7,6 @@ import (
 
 type BalanceRepo interface {
 	CreateBalanceByBalance(command balance_models.CommandCreateBalanceByBalance) *answer.Answer
-	ReadBalanceByUserId(command balance_models.QueryReadBalanceByUserId) *answer.Answer
+	ReadBalancesByUserId(command balance_models.QueryReadBalancesByUserId) *answer.Answer
+	ReadBalancesByUserIdAndCoinId(query balance_models.QueryReadBalanceByUserIdAndCoinId) *answer.Answer
 }

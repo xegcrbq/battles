@@ -1,8 +1,12 @@
 package balance_models
 
 type CommandCreateBalanceByBalance struct {
-	Balance *ClientBalance
+	Balance *Balance
 }
-type QueryReadBalanceByUserId struct {
-	UserId string
+type QueryReadBalancesByUserId struct {
+	UserId int64
+}
+type QueryReadBalanceByUserIdAndCoinId struct {
+	UserId int64
+	CoinId int16
 }

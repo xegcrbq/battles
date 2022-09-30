@@ -1,6 +1,6 @@
 package coins
 
 type Coin struct {
-	CoinId int32
-	Ticker string
+	CoinId int16  `db:"coinid"`
+	Ticker string `db:"ticker"`
 }

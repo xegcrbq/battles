@@ -1,11 +1,11 @@
 package balance_models
 
-type ClientBalance struct {
-	BalanceId int64
+type Balance struct {
+	BalanceId int64 `db:"balanceid"`
 	UserId    int64 `db:"userid"`
-	//Amount хранит условные сатоши, делим на 10^-8, чтобы получить реальное число монет
-	Amount int64
-	CoinId int64
+	//Amount хранит условные сатоши, умножаем на 10^-8, чтобы получить реальное число монет
+	Amount int64 `db:"amount"`
+	CoinId int16 `db:"coinid"`
 }
 type Pair struct {
 	First  string
