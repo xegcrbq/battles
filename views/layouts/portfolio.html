@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>portfolio</title>
+    <link rel="stylesheet" href="portfolio.css">
+</head>
+<body>
+    <script src="socket.js"></script>
+    <script src="filter.js"></script>
+    <script>
+        var mysocket = new MySocket()
+        mysocket.connectSocket()
+    </script>
+
+    <div>Адрес кошелька: {{.PublicAddress}}</div><div class="totalBalance"></div>
+    <div>
+        {{range .Balance}}
+        <ul>
+            <div>{{.Ticker}} Amount:{{.Amount}} Price:{{.Price}}$</div>
+            <div>Total: </div><div class="totalSubBalance T{{.Ticker}}"></div><div>$</div><!--total-->
+            <button id="{{.Ticker}}" class="buy B{{.Ticker}}">+</button>
+            <input id="{{.Ticker}}" class="I{{.Ticker}}">
+            <script>
+                document.querySelector(".B{{.Ticker}}").addEventListener('click', function (e) {
+                    console.log(e.target.id)
+                    mysocket.send(
+                        "buy",
+                        {
+                        ticker: {{.Ticker}},
+                        amount: document.querySelector(".I{{.Ticker}}").value
+                        },
+                        document.querySelector(".I{{.Ticker}}")
+                    )
+                });
+                document.querySelector(".I{{.Ticker}}").addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        console.log(e.target.id)
+                        mysocket.send(
+                            "buy",
+                            {
+                                ticker: {{.Ticker}},
+                                amount: document.querySelector(".I{{.Ticker}}").value
+                            },
+                            document.querySelector(".I{{.Ticker}}")
+                        )
+                    }
+                });
+                document.querySelector(".T{{.Ticker}}").innerHTML = (parseFloat({{.Amount}})*parseFloat({{.Price}})).toString()
+                console.log(parseFloat({{.Amount}})*parseFloat({{.Price}}))
+            </script>
+            <script>
+                setInputFilter(document.querySelector(".I{{.Ticker}}"), function(value) {
+                    return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+                }, "Only digits and '.' are allowed");
+            </script>
+
+        </ul>
+        {{ end }}
+    </div>
+    <script>
+
+        const balances = document.querySelectorAll(".totalSubBalance")
+        let result = 0
+        balances.forEach((element) =>{
+            result += parseFloat(element.innerHTML)
+        })
+        document.querySelector(".totalBalance").innerHTML = "Total: " + result.toString() + "$"
+    </script>
+</body>
+</html>

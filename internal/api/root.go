@@ -1,9 +1,12 @@
 package api
 
 import (
-	"battles/internal/auth"
+	"battles/internal/api/auth"
+	"battles/internal/api/portfolio"
+	"battles/internal/api/web_socket"
 	"battles/internal/utils/logger"
 	"context"
+	"github.com/antoniodipinto/ikisocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html"
 	"github.com/sirupsen/logrus"
@@ -23,7 +26,7 @@ func (svc *APIService) Shutdown(ctx context.Context) error {
 }
 
 func NewAPIService() (*APIService, error) {
-	engine := html.New("./templates", ".html")
+	engine := html.New("./views", ".html")
 
 	svc := &APIService{
 		log: logrus.NewEntry(logger.Get()),
@@ -32,12 +35,17 @@ func NewAPIService() (*APIService, error) {
 		}),
 	}
 	authCtrl := auth.NewAuthController()
-
+	portfCtrl := portfolio.NewPortfolioController()
+	wbCtrl := web_socket.NewWSController()
 	//svc.router.Use(svc.AuthMiddleware())
 	api := svc.router.Group("/api/")
-	api.Static("/", "./templates")
-	api.Get("portfolio/", authCtrl.Portfolio)
+	api.Static("/", "./styles")
+	//portfolio
+	api.Get("portfolio/", portfCtrl.Portfolio)
+	//login
 	api.Get("login", authCtrl.Auth)
+	//web socket
+	api.Get("ws/:public_address_token", ikisocket.New(wbCtrl.SocketReaderCreate))
 
 	return svc, nil
 }

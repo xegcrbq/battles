@@ -14,7 +14,10 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/antoniodipinto/ikisocket v0.0.0-20220806220653-2e4f04aebe6a // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fasthttp/websocket v1.5.0 // indirect
+	github.com/gofiber/websocket/v2 v2.0.21 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/puddle/v2 v2.0.0 // indirect
@@ -26,6 +29,7 @@ require (
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
+	github.com/savsgio/gotils v0.0.0-20211223103454-d0aaa54c5899 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.40.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

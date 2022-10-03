@@ -10,14 +10,13 @@ var once sync.Once
 func InitEnv() error {
 	var err error
 	once.Do(func() {
-		err = godotenv.Load(".env")
-		if err != nil {
-			err = godotenv.Load("..\\.env")
-			if err != nil {
-				err = godotenv.Load("..\\..\\.env")
-				if err != nil {
-					panic(err)
-				}
+		envstr := ".env"
+		for i := 0; i < 5; i++ {
+			err = godotenv.Load(envstr)
+			if err == nil {
+				return
+			} else {
+				envstr = "..\\" + envstr
 			}
 		}
 	})

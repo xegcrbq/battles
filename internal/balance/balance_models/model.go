@@ -7,6 +7,7 @@ type Balance struct {
 	Amount int64 `db:"amount"`
 	CoinId int16 `db:"coinid"`
 }
+
 type Pair struct {
 	First  string
 	Second string

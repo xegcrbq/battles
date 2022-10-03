@@ -2,9 +2,8 @@ package balance
 
 import (
 	"battles/internal/balance/balance_models"
-	"battles/internal/utils/logger"
+	"battles/internal/utils/errors_custom"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"sync"
 )
@@ -42,11 +41,18 @@ func (h *Holder) AddUSDTPair(first string) {
 		Second: "USDT",
 	})
 }
+func (h *Holder) GetByKeyUSDT(first string) (float64, error) {
+	for i := range h.Pairs {
+		if h.Pairs[i].First == first {
+			return h.Pairs[i].Price, nil
+		}
+	}
+	return 0, errors_custom.VariableNotFound
+}
 func (h *Holder) Update() {
-	lg := logger.Get()
+	//lg := logger.Get()
 	wg := sync.WaitGroup{}
 	wg.Add(len(h.Pairs))
-	fmt.Printf("%p\n", lg)
 	for index, _ := range h.Pairs {
 		go func(wg *sync.WaitGroup, i int) {
 			a := binanceAnswer{}
@@ -64,4 +70,5 @@ func (h *Holder) Update() {
 		}(&wg, index)
 	}
 	wg.Wait()
+	//lg.Debugf("Updated balance")
 }

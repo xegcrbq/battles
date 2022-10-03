@@ -17,7 +17,7 @@ func NewBalanceRepoSQL(db *sqlx.DB) BalanceRepo {
 
 func (r *BalanceRepoSQL) CreateBalanceByBalance(command balance_models.CommandCreateBalanceByBalance) *answer.Answer {
 	b := command.Balance
-	logger.Get().Debug("Created Balance with command: ", command.Balance)
+	logger.Get().Debug("Trying create Balance with command: ", command.Balance)
 	_, err := r.db.Exec(`INSERT INTO balances(userid, amount, coinid) VALUES ($1, $2, $3)`, b.UserId, b.Amount, b.CoinId)
 	return &answer.Answer{Err: err}
 }
