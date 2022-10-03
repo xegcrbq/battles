@@ -24,3 +24,13 @@ func TestCreate(t *testing.T) {
 		})
 	logger.Get().Debugf("TestCreate error: %v", answ.Err)
 }
+func TestUpdateOrCreateBalanceByUserIdAmountAndTicker(t *testing.T) {
+	ubcr := NewUserBalanceCoinsRepoSQL(db.Get())
+	answ := ubcr.UpdateOrCreateBalanceByUserIdAmountAndTicker(
+		userbalancecoins_models.CommandUpdateOrCreateBalanceByUserIdAmountAndTicker{
+			UserId: 1,
+			Ticker: "DOT",
+			Amount: 80500,
+		})
+	logger.Get().Debugf("TestCreate error: %v", answ.Err)
+}

@@ -6,7 +6,8 @@ import (
 )
 
 type UserBalanceCoinsRepo interface {
-	ReadUserBalanceCoinsByUserPublicAddress(query userbalancecoins_models.QueryReadUserBalanceCoinsByUserPublicAddress) *answer.Answer
 	CreateBalanceByUserPublicAddressAndAmountAndTicker(command userbalancecoins_models.CommandCreateBalanceByUserPublicAddressAndAmountAndTicker) *answer.Answer
+	ReadUserBalanceCoinsByUserPublicAddress(query userbalancecoins_models.QueryReadUserBalanceCoinsByUserPublicAddress) *answer.Answer
 	ReadUserBalanceAllCoinsByUserPublicAddress(query userbalancecoins_models.QueryReadUserBalanceAllCoinsByUserPublicAddress) *answer.Answer
+	UpdateOrCreateBalanceByUserIdAmountAndTicker(command userbalancecoins_models.CommandUpdateOrCreateBalanceByUserIdAmountAndTicker) *answer.Answer
 }

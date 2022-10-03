@@ -3,6 +3,7 @@ package balance
 import (
 	"battles/internal/utils/logger"
 	"testing"
+	"time"
 )
 
 func TestHolder(t *testing.T) {
@@ -13,6 +14,7 @@ func TestHolder(t *testing.T) {
 	lg.Infof("pre updated pairs: %v", h.Pairs)
 	h.Update()
 	lg.Infof("updated pairs: %v", h.Pairs)
-	price, err := h.GetByKeyUSDT("BTC")
+	price, err := h.GetPriceByKeyUSDT("BTC")
 	lg.Infof("BTC price: %v, error: %v", price, err)
+	h.AutoUpdate(time.Second * 5)
 }

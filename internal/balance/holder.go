@@ -3,9 +3,11 @@ package balance
 import (
 	"battles/internal/balance/balance_models"
 	"battles/internal/utils/errors_custom"
+	"battles/internal/utils/logger"
 	"encoding/json"
 	"strconv"
 	"sync"
+	"time"
 )
 
 type Holder struct {
@@ -41,7 +43,7 @@ func (h *Holder) AddUSDTPair(first string) {
 		Second: "USDT",
 	})
 }
-func (h *Holder) GetByKeyUSDT(first string) (float64, error) {
+func (h *Holder) GetPriceByKeyUSDT(first string) (float64, error) {
 	for i := range h.Pairs {
 		if h.Pairs[i].First == first {
 			return h.Pairs[i].Price, nil
@@ -71,4 +73,14 @@ func (h *Holder) Update() {
 	}
 	wg.Wait()
 	//lg.Debugf("Updated balance")
+}
+func (h *Holder) AutoUpdate(period time.Duration) {
+	if period < time.Second*3 {
+		period = time.Second * 10
+	}
+	for range time.Tick(period) {
+		logger.Get().Debug("Auto Update tick")
+		logger.Get().Debug(h.Pairs)
+		go h.Update()
+	}
 }

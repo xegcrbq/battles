@@ -6,3 +6,6 @@ type CommandCreateBaseBalanceByBaseBalance struct {
 type QueryReadBaseBalanceByUserId struct {
 	UserId int64
 }
+type CommandUpdateBaseBalanceByBaseBalance struct {
+	BaseBalance *BaseBalance
+}

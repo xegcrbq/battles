@@ -12,3 +12,8 @@ type CommandCreateBalanceByUserPublicAddressAndAmountAndTicker struct {
 	Amount            int64
 	Ticker            string
 }
+type CommandUpdateOrCreateBalanceByUserIdAmountAndTicker struct {
+	UserId int64
+	Amount int64
+	Ticker string
+}

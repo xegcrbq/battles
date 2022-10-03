@@ -7,6 +7,7 @@ import (
 	"battles/internal/utils/tokenizer"
 	"github.com/sirupsen/logrus"
 	"sync"
+	"time"
 )
 
 var reg *Registry = nil
@@ -25,6 +26,7 @@ func Get() *Registry {
 		h := balance.NewHolder(us)
 		h.InitTop10()
 		h.Update()
+		go h.AutoUpdate(time.Second * 30)
 		reg = &Registry{
 			Log:           logger.Get(),
 			Tknz:          tokenizer.Get(),

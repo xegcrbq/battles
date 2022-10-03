@@ -13,7 +13,10 @@
         mysocket.connectSocket()
     </script>
 
-    <div>Адрес кошелька: {{.PublicAddress}}</div><div class="totalBalance"></div>
+    <div>Адрес кошелька: {{.PublicAddress}}</div>
+    <div><div>USDT balance: </div><div class="baseBalance"></div></div>
+    <div>{{.BuyHistory}}</div>
+    <div class="totalBalance"></div>
     <div>
         {{range .Balance}}
         <ul>
@@ -61,7 +64,9 @@
     <script>
 
         const balances = document.querySelectorAll(".totalSubBalance")
-        let result = 0
+        const baseBalance = document.querySelector(".baseBalance")
+        baseBalance.innerHTML = {{.BaseBalance}};
+        let result = parseFloat(baseBalance.innerHTML)
         balances.forEach((element) =>{
             result += parseFloat(element.innerHTML)
         })

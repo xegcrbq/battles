@@ -13,7 +13,7 @@ func UBCToWithPrice(ubc *userbalancecoins_models.UserBalanceCoins) (*userbalance
 	if ubc.Amount/int64(int(math.Pow10(8)))/int64(math.Floor(math.MaxFloat64)) > 0 {
 		return nil, errors_custom.VariableTooLarge
 	}
-	price, err := registry.Get().BalanceHolder.GetByKeyUSDT(ubc.Ticker)
+	price, err := registry.Get().BalanceHolder.GetPriceByKeyUSDT(ubc.Ticker)
 	if err != nil {
 		return nil, err
 	}

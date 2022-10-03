@@ -16,4 +16,6 @@ type Answer struct {
 	Balances         *[]balance_models.Balance
 	BaseBalance      *base_balance_models.BaseBalance
 	UserBalanceCoins *[]userbalancecoins_models.UserBalanceCoins
+	//BuyHistorySums key - ticker, value - grouped by coinId sum
+	BuyHistorySums *map[string]string
 }

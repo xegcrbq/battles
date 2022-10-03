@@ -27,3 +27,10 @@ func (r *BaseBalanceRepoSQL) ReadBaseBalanceByUserId(query base_balance_models.Q
 	logger.Get().Debug("Read Base balances: ", baseBalance, " for userId: ", query.UserId)
 	return &answer.Answer{Err: err, BaseBalance: &baseBalance}
 }
+
+func (r *BaseBalanceRepoSQL) UpdateBaseBalanceByBaseBalance(command base_balance_models.CommandUpdateBaseBalanceByBaseBalance) *answer.Answer {
+	logger.Get().Debug("Update BaseBalanceByBaseBalance with command: ", command.BaseBalance)
+	_, err := r.db.Exec(`	UPDATE base_balances SET amount = $1 WHERE userid = $2;`,
+		command.BaseBalance.Amount, command.BaseBalance.UserId)
+	return &answer.Answer{Err: err}
+}

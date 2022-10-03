@@ -26,6 +26,15 @@ CREATE TABLE base_balances(
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
     CONSTRAINT positive_amount CHECK ( amount > 0 )
 );
+CREATE TABLE buy_history(
+    buy_history_id bigserial primary key,
+    userid bigserial not null,
+    coinid bigserial not null,
+    sum bigint,
+    CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
+    CONSTRAINT fk_coin FOREIGN KEY (coinid) REFERENCES coins(coinid) ON DELETE CASCADE,
+    CONSTRAINT positive_sum CHECK ( sum > 0 )
+);
 
 INSERT INTO coins(ticker)
 VALUES
@@ -51,13 +60,7 @@ VALUES
     (1,100000, 3);
 insert into base_balances(userid,amount)
 values (1,1000 *pow(10, 8));
-SELECT users.public_address, balances.amount, c.ticker
-FROM
-    users
-        INNER JOIN balances
-                   ON users.userid = balances.userid
-        INNER JOIN coins c on c.coinid = balances.coinid
-WHERE  users.public_address = '0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C';
+
 SELECT COALESCE(balances.amount, 0), c.ticker
 FROM
     (SELECT public_address, userid from users where public_address = '0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C') as users
