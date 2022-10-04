@@ -6,6 +6,7 @@ type Balance struct {
 	//Amount хранит условные сатоши, умножаем на 10^-8, чтобы получить реальное число монет
 	Amount int64 `db:"amount"`
 	CoinId int16 `db:"coinid"`
+	Spent  int64 `db:"spent"`
 }
 
 type Pair struct {

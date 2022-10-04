@@ -2,14 +2,15 @@ package portfolio
 
 import (
 	"battles/internal/base_balance/base_balance_models"
-	"battles/internal/buy_history"
+	"battles/internal/coins/coins_model"
 	"battles/internal/userbalancecoins/userbalancecoins_models"
 	"battles/internal/userbalancecoins/userbalancecoins_models/ubc_convert"
 	"battles/internal/users/user_models"
+	"battles/internal/utils/converter"
+	"battles/internal/utils/logger"
 	"battles/internal/utils/registry"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"math"
 )
 
 type PortfolioController struct {
@@ -17,6 +18,7 @@ type PortfolioController struct {
 }
 
 func NewPortfolioController() *PortfolioController {
+	InitCoinsDB()
 	return &PortfolioController{reg: registry.Get()}
 }
 
@@ -44,11 +46,6 @@ func (c *PortfolioController) Portfolio(ctx *fiber.Ctx) error {
 		c.reg.Log.Infof("Portfolio, base balance not found, err: %v", answB.Err)
 		return answB.Err
 	}
-	answBH := c.reg.Repo.Exec(buy_history.QueryReadBuyHistorySimpleByUserId{UserId: answU.User.UserId})
-	if answBH.Err != nil || answBH.BuyHistorySums == nil {
-		c.reg.Log.Infof("Portfolio, BuyHistory not found, err: %v", answBH.Err)
-		return answBH.Err
-	}
 	ubcConverted, err := ubc_convert.ConvertUBCarrToUBCwParr(*answB.UserBalanceCoins)
 	if err != nil {
 		return err
@@ -58,8 +55,24 @@ func (c *PortfolioController) Portfolio(ctx *fiber.Ctx) error {
 		fiber.Map{
 			"PublicAddress": answU.User.PublicAddress,
 			"Balance":       ubcConverted,
-			"BaseBalance":   fmt.Sprintf("%.8f", float64(answBB.BaseBalance.Amount)/math.Pow10(8)),
-			"BuyHistory":    answBH.BuyHistorySums,
+			"BaseBalance":   fmt.Sprintf("%.8f", converter.Int64ToFloat64(answBB.BaseBalance.Amount)),
 		},
 	)
+}
+
+func InitCoinsDB() {
+	balanceMap := registry.Get().BinanceHolder.GetMap()
+	answ := registry.Get().Repo.Exec(coins_model.QueryReadCoinsCount{})
+	if answ.Err != nil {
+		logger.Get().Debug("PortfolioController InitCoinsDB error: ", answ.Err)
+		return
+	}
+	if len(*balanceMap) > answ.Count {
+		logger.Get().Info("Starting coins table initializing")
+		for k := range *balanceMap {
+			if k != "" {
+				registry.Get().Repo.Exec(coins_model.CommandCreateCoinByTicker{Ticker: k})
+			}
+		}
+	}
 }

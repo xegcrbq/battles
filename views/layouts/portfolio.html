@@ -11,22 +11,28 @@
     <script>
         var mysocket = new MySocket()
         mysocket.connectSocket()
+        let sumSpent = parseFloat({{.BaseBalance}})
     </script>
 
     <div>Адрес кошелька: {{.PublicAddress}}</div>
     <div><div>USDT balance: </div><div class="baseBalance"></div></div>
     <div>{{.BuyHistory}}</div>
     <div class="totalBalance"></div>
+    <div class="totalChange"></div>
     <div>
         {{range .Balance}}
         <ul>
             <div>{{.Ticker}} Amount:{{.Amount}} Price:{{.Price}}$</div>
-            <div>Total: </div><div class="totalSubBalance T{{.Ticker}}"></div><div>$</div><!--total-->
+
+            <div class="CH_cont{{.Ticker}}"><!--container shown if user bought some coins-->
+                <div>Total: </div><div class="totalSubBalance T{{.Ticker}}"></div><div>$</div><!--total-->
+                <div>Change: </div><div class="change CH{{.Ticker}}"></div>
+            </div>
             <button id="{{.Ticker}}" class="buy B{{.Ticker}}">+</button>
             <input id="{{.Ticker}}" class="I{{.Ticker}}">
             <script>
                 document.querySelector(".B{{.Ticker}}").addEventListener('click', function (e) {
-                    console.log(e.target.id)
+                    // console.log(e.target.id)
                     mysocket.send(
                         "buy",
                         {
@@ -38,7 +44,7 @@
                 });
                 document.querySelector(".I{{.Ticker}}").addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
-                        console.log(e.target.id)
+                        // console.log(e.target.id)
                         mysocket.send(
                             "buy",
                             {
@@ -50,14 +56,21 @@
                     }
                 });
                 document.querySelector(".T{{.Ticker}}").innerHTML = (parseFloat({{.Amount}})*parseFloat({{.Price}})).toString()
-                console.log(parseFloat({{.Amount}})*parseFloat({{.Price}}))
+                sumSpent += parseFloat({{.Spent}})
             </script>
             <script>
                 setInputFilter(document.querySelector(".I{{.Ticker}}"), function(value) {
                     return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
                 }, "Only digits and '.' are allowed");
             </script>
+            <script>
+                if (parseFloat({{.Spent}}) > 0){
+                    document.querySelector(".CH{{.Ticker}}").innerHTML = ((parseFloat({{.Amount}})*parseFloat({{.Price}}) - parseFloat({{.Spent}}))/parseFloat({{.Spent}})*100).toFixed(2) + "%"
+                } else {
+                    document.querySelector(".CH_cont{{.Ticker}}").style.display = 'none';
+                }
 
+            </script>
         </ul>
         {{ end }}
     </div>
@@ -70,7 +83,11 @@
         balances.forEach((element) =>{
             result += parseFloat(element.innerHTML)
         })
-        document.querySelector(".totalBalance").innerHTML = "Total: " + result.toString() + "$"
+
+        document.querySelector(".totalBalance").innerHTML = "Total: " + result.toString() + "$";
+        if (sumSpent != 0){
+            document.querySelector(".totalChange").innerHTML = "Total Change: " + ((result - sumSpent) / (sumSpent) * 100).toFixed(2) + "%";
+        }
     </script>
 </body>
 </html>

@@ -26,8 +26,8 @@ func TestCreate(t *testing.T) {
 }
 func TestUpdateOrCreateBalanceByUserIdAmountAndTicker(t *testing.T) {
 	ubcr := NewUserBalanceCoinsRepoSQL(db.Get())
-	answ := ubcr.UpdateOrCreateBalanceByUserIdAmountAndTicker(
-		userbalancecoins_models.CommandUpdateOrCreateBalanceByUserIdAmountAndTicker{
+	answ := ubcr.UpdateOrCreateBalanceByUserIdAmountSpentAndTicker(
+		userbalancecoins_models.CommandUpdateOrCreateBalanceByUserIdAmountSpentAndTicker{
 			UserId: 1,
 			Ticker: "DOT",
 			Amount: 80500,

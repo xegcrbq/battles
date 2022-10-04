@@ -2,7 +2,7 @@ package balance
 
 import (
 	"battles/internal/balance/balance_models"
-	"battles/internal/utils/errors_custom"
+	"battles/internal/utils/custom_errs"
 	"battles/internal/utils/logger"
 	"encoding/json"
 	"strconv"
@@ -49,7 +49,7 @@ func (h *Holder) GetPriceByKeyUSDT(first string) (float64, error) {
 			return h.Pairs[i].Price, nil
 		}
 	}
-	return 0, errors_custom.VariableNotFound
+	return 0, custom_errs.VariableNotFound
 }
 func (h *Holder) Update() {
 	//lg := logger.Get()
@@ -79,8 +79,7 @@ func (h *Holder) AutoUpdate(period time.Duration) {
 		period = time.Second * 10
 	}
 	for range time.Tick(period) {
-		logger.Get().Debug("Auto Update tick")
-		logger.Get().Debug(h.Pairs)
+		logger.Get().Debug("Auto Update ", h.Pairs)
 		go h.Update()
 	}
 }

@@ -13,10 +13,12 @@ CREATE TABLE balances(
     userid bigserial not null,
     amount bigint not null,
     coinid int2 not null,
+    spent bigint not null,
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
     CONSTRAINT fk_coin FOREIGN KEY (coinid) REFERENCES coins(coinid) ON DELETE CASCADE,
     CONSTRAINT unique_user_coin_pairs unique (userid, coinid),
-    CONSTRAINT positive_amount CHECK ( amount > 0 )
+    CONSTRAINT positive_amount CHECK ( amount > 0 ),
+    CONSTRAINT positive_spent CHECK ( spent > 0 )
 );
 
 CREATE TABLE base_balances(
@@ -25,15 +27,6 @@ CREATE TABLE base_balances(
     amount bigint not null,
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
     CONSTRAINT positive_amount CHECK ( amount > 0 )
-);
-CREATE TABLE buy_history(
-    buy_history_id bigserial primary key,
-    userid bigserial not null,
-    coinid bigserial not null,
-    sum bigint,
-    CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
-    CONSTRAINT fk_coin FOREIGN KEY (coinid) REFERENCES coins(coinid) ON DELETE CASCADE,
-    CONSTRAINT positive_sum CHECK ( sum > 0 )
 );
 
 INSERT INTO coins(ticker)
@@ -52,26 +45,13 @@ INSERT INTO users(public_address)
 VALUES ('0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C');
 INSERT INTO users(public_address)
 VALUES ('0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d59C');
-INSERT INTO balances(userid, amount, coinid)
+INSERT INTO balances(userid, amount, coinid, spent)
 VALUES
-    (1,1000, 1);
-INSERT INTO balances(userid, amount, coinid)
-VALUES
-    (1,100000, 3);
-insert into base_balances(userid,amount)
-values (1,1000 *pow(10, 8));
+    (1,1000, 1, 1000),
+    (1,100000, 3, 100000),
+    (1,1000 *pow(10, 8), 8, 2000);
 
-SELECT COALESCE(balances.amount, 0), c.ticker
-FROM
-    (SELECT public_address, userid from users where public_address = '0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C') as users
-        INNER JOIN balances
-                   ON users.userid = balances.userid
-        Right JOIN coins c on c.coinid = balances.coinid;
-
-INSERT INTO balances(userid, amount, coinid)
-VALUES
-    (
-     (Select userid from users where public_address = '0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C'),
-     1000,
-     (Select coinid FROM coins where ticker='XRP')
-     );
+INSERT INTO base_balances(userid, amount)
+values
+    (1, 100000000000),
+    (2, 100000000000);

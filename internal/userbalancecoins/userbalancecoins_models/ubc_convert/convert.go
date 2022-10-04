@@ -2,7 +2,9 @@ package ubc_convert
 
 import (
 	"battles/internal/userbalancecoins/userbalancecoins_models"
-	"battles/internal/utils/errors_custom"
+	"battles/internal/utils/converter"
+	"battles/internal/utils/custom_errs"
+	"battles/internal/utils/logger"
 	"battles/internal/utils/registry"
 	"fmt"
 	"math"
@@ -10,17 +12,19 @@ import (
 
 func UBCToWithPrice(ubc *userbalancecoins_models.UserBalanceCoins) (*userbalancecoins_models.UserBalanceCoinsWithPrice, error) {
 
-	if ubc.Amount/int64(int(math.Pow10(8)))/int64(math.Floor(math.MaxFloat64)) > 0 {
-		return nil, errors_custom.VariableTooLarge
+	if ubc.Amount/int64(math.Pow10(8))/int64(math.Floor(math.MaxFloat64)) > 0 {
+		return nil, custom_errs.VariableTooLarge
 	}
-	price, err := registry.Get().BalanceHolder.GetPriceByKeyUSDT(ubc.Ticker)
-	if err != nil {
-		return nil, err
+	price, success := registry.Get().BinanceHolder.GetPriceByTicker(ubc.Ticker)
+	if !success {
+		logger.Get().Warnf("UBCToWithPrice Ticker '%v' not found", ubc.Ticker)
+		return nil, custom_errs.VariableNotFound
 	}
 	return &userbalancecoins_models.UserBalanceCoinsWithPrice{
 		Ticker: ubc.Ticker,
-		Amount: fmt.Sprintf("%.8f", float64(ubc.Amount%int64(math.Pow10(8)))*math.Pow10(-8)+float64(ubc.Amount/int64(int(math.Pow10(8))))),
+		Amount: fmt.Sprintf("%.8f", converter.Int64ToFloat64(ubc.Amount)),
 		Price:  fmt.Sprintf("%.8f", price),
+		Spent:  fmt.Sprintf("%.8f", converter.Int64ToFloat64(ubc.Spent)),
 	}, nil
 }
 func ConvertUBCarrToUBCwParr(ubc []userbalancecoins_models.UserBalanceCoins) ([]userbalancecoins_models.UserBalanceCoinsWithPrice, error) {

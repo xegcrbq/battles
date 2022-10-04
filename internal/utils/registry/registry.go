@@ -2,6 +2,7 @@ package registry
 
 import (
 	"battles/internal/balance"
+	"battles/internal/balance/binance"
 	"battles/internal/utils/logger"
 	"battles/internal/utils/repository"
 	"battles/internal/utils/tokenizer"
@@ -18,6 +19,7 @@ type Registry struct {
 	Tknz          *tokenizer.Tokenizer
 	Repo          *repository.Repository
 	BalanceHolder *balance.Holder
+	BinanceHolder *binance.BinanceHolder
 }
 
 func Get() *Registry {
@@ -32,6 +34,7 @@ func Get() *Registry {
 			Tknz:          tokenizer.Get(),
 			Repo:          repository.NewRepository(),
 			BalanceHolder: h,
+			BinanceHolder: binance.NewBinanceHolder("https://api.binance.com/api/v3/ticker/bookTicker", "USDT"),
 		}
 	})
 	return reg
