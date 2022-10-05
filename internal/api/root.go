@@ -39,11 +39,17 @@ func NewAPIService() (*APIService, error) {
 	wbCtrl := web_socket.NewWSController()
 	//svc.router.Use(svc.AuthMiddleware())
 	api := svc.router.Group("/api/")
+	auth := svc.router.Group("/auth/")
 	api.Static("/", "./styles")
 	//portfolio
 	api.Get("portfolio/", portfCtrl.Portfolio)
-	//login
+	//login2
 	api.Get("login", authCtrl.Auth)
+	api.Get("login2", authCtrl.Auth2)
+	//test
+	api.Post("test", authCtrl.Test)
+	//login with MM
+	auth.Post("getNonce", authCtrl.GetNonce)
 	//web socket
 	api.Get("ws/:public_address_token", ikisocket.New(wbCtrl.SocketReaderCreate))
 

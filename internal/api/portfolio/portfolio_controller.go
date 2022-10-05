@@ -40,7 +40,7 @@ func (c *PortfolioController) Portfolio(ctx *fiber.Ctx) error {
 		c.reg.Log.Infof("Portfolio, user balance coin not found, err: %v", answB.Err)
 		return answB.Err
 	}
-	c.reg.Log.Debugf("Balances: %v", answB.UserBalanceCoins)
+	//c.reg.Log.Debugf("Balances: %v", answB.UserBalanceCoins)
 	answBB := c.reg.Repo.Exec(base_balance_models.QueryReadBaseBalanceByUserId{answU.User.UserId})
 	if answBB.Err != nil || answBB.BaseBalance == nil {
 		c.reg.Log.Infof("Portfolio, base balance not found, err: %v", answB.Err)

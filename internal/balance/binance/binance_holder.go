@@ -21,6 +21,7 @@ func NewBinanceHolder(url, filterTicker string) *BinanceHolder {
 		filterTicker: filterTicker,
 	}
 	bh.init()
+	bh.AutoUpdate(30 * time.Second)
 	return bh
 }
 func (h *BinanceHolder) init() {
@@ -69,7 +70,7 @@ func (h *BinanceHolder) AutoUpdate(period time.Duration) {
 	}
 	go func() {
 		for range time.Tick(period) {
-			logger.Get().Debug("Auto Update ", h.dataMap)
+			//logger.Get().Debug("Auto Update ", h.dataMap)
 			h.init()
 		}
 	}()

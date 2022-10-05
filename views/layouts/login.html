@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <button class="login-mm"></button>
+    <div class="account_data"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="metamask.js"></script>
+    <script>
+        if (isMetaMaskInstalled()) {
+            document.querySelector(".login-mm").innerHTML = "Connect metamask"
+            document.querySelector(".login-mm").addEventListener('click', function () { onClickConnect()} )
+        } else {
+            document.querySelector(".login-mm").innerHTML = "Install metamask"
+        }
+
+      {{/*function web3Login() {*/}}
+      {{/*  Подписываем сообщение */}}
+      {{/*  try {*/}}
+      {{/*    window.ethereum.enable().then(function () {*/}}
+      {{/*      provider = new ethers.providers.Web3Provider(window.ethereum);*/}}
+      {{/*      provider.getNetwork().then(function (result) {*/}}
+      {{/*        if (result['chainId'] != 1) {*/}}
+      {{/*          alert('Switch to Mainnet!');*/}}
+      {{/*        } else {*/}}
+      {{/*          provider.listAccounts().then(function (result) {*/}}
+      {{/*            accountAddress = result[0];*/}}
+      {{/*            signer = provider.getSigner();*/}}
+      {{/*            signer.signMessage("Sign to auth {{ .csrf_token }}").then((signature) => {web3LoginBackend(accountAddress, signature)});*/}}
+      {{/*          })*/}}
+      {{/*        }*/}}
+      {{/*      })*/}}
+      {{/*    })*/}}
+      {{/*  } catch {*/}}
+      {{/*    alert('Please install MetaMask for your browser.')*/}}
+      {{/*  }*/}}
+      {{/*}*/}}
+
+      {{/*function web3LoginBackend(accountAddress, signature) {*/}}
+      {{/* Отправляем данные на django view */}}
+      {{/*  var form = document.createElement('form');*/}}
+      {{/*  form.action = 'http://127.0.0.1:8080/api/test/'; */}}
+      {{/*  form.method = 'POST';*/}}
+
+      {{/*  var input = document.createElement('input');*/}}
+      {{/*  input.type = 'hidden';*/}}
+      {{/*  input.name = 'csrfmiddlewaretoken';*/}}
+      {{/*  input.value = '{{ .csrf_token }}';*/}}
+      {{/*  form.appendChild(input);*/}}
+
+      {{/*  var input = document.createElement('input');*/}}
+      {{/*  input.type = 'hidden';*/}}
+      {{/*  input.name = 'accountAddress';*/}}
+      {{/*  input.value = accountAddress;*/}}
+      {{/*  form.appendChild(input);*/}}
+
+      {{/*  var input = document.createElement('input');*/}}
+      {{/*  input.type = 'hidden';*/}}
+      {{/*  input.name = 'signature';*/}}
+      {{/*  input.value = signature;*/}}
+      {{/*  form.appendChild(input);*/}}
+
+      {{/*  document.body.appendChild(form);*/}}
+      {{/*  form.submit();*/}}
+      {{/*}*/}}
+    </script>
+</body>
+</html>

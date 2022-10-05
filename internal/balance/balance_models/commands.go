@@ -8,5 +8,5 @@ type QueryReadBalancesByUserId struct {
 }
 type QueryReadBalanceByUserIdAndCoinId struct {
 	UserId int64
-	CoinId int16
+	CoinId int32
 }

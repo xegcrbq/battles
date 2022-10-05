@@ -5,7 +5,7 @@ type Balance struct {
 	UserId    int64 `db:"userid"`
 	//Amount хранит условные сатоши, умножаем на 10^-8, чтобы получить реальное число монет
 	Amount int64 `db:"amount"`
-	CoinId int16 `db:"coinid"`
+	CoinId int32 `db:"coinid"`
 	Spent  int64 `db:"spent"`
 }
 

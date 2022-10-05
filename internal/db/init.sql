@@ -4,7 +4,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE coins(
-    coinid serial2 primary key,
+    coinid serial4 primary key,
     ticker varchar(10) not null UNIQUE
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE balances(
     balanceid bigserial primary key,
     userid bigserial not null,
     amount bigint not null,
-    coinid int2 not null,
+    coinid int4 not null,
     spent bigint not null,
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
     CONSTRAINT fk_coin FOREIGN KEY (coinid) REFERENCES coins(coinid) ON DELETE CASCADE,
@@ -26,30 +26,30 @@ CREATE TABLE base_balances(
     userid bigserial not null unique ,
     amount bigint not null,
     CONSTRAINT fk_user FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
-    CONSTRAINT positive_amount CHECK ( amount > 0 )
+    CONSTRAINT positive_amount CHECK ( amount >= 0 )
 );
-
-INSERT INTO coins(ticker)
-VALUES
-    ('BTC'),
-    ('ETH'),
-    ('USDC'),
-    ('BNB'),
-    ('XRP'),
-    ('BUSD'),
-    ('ADA'),
-    ('SOL'),
-    ('DOGE'),
-    ('DOT');
+-- delete FROM balances;
+-- INSERT INTO coins(ticker)
+-- VALUES
+--     ('BTC'),
+--     ('ETH'),
+--     ('USDC'),
+--     ('BNB'),
+--     ('XRP'),
+--     ('BUSD'),
+--     ('ADA'),
+--     ('SOL'),
+--     ('DOGE'),
+--     ('DOT');
 INSERT INTO users(public_address)
 VALUES ('0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d58C');
 INSERT INTO users(public_address)
 VALUES ('0x8a8cB99FBE417c2fBED13B4982e4fE1BE364d59C');
-INSERT INTO balances(userid, amount, coinid, spent)
-VALUES
-    (1,1000, 1, 1000),
-    (1,100000, 3, 100000),
-    (1,1000 *pow(10, 8), 8, 2000);
+-- INSERT INTO balances(userid, amount, coinid, spent)
+-- VALUES
+--     (1,1000, 1, 1000),
+--     (1,100000, 3, 100000),
+--     (1,1000 *pow(10, 8), 8, 2000);
 
 INSERT INTO base_balances(userid, amount)
 values
